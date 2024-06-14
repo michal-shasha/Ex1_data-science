@@ -116,9 +116,12 @@ class Factor implements Comparable<Factor>{
     public double getValue(String queryVar, String queryValue) {
         int index = variables.indexOf(queryVar);
         for (Map.Entry<List<String>, Double> entry : values.entrySet()) {
-            if (entry.getKey().get(index).equals(queryValue)) {
-                return entry.getValue();
+            if(index > -1){
+                if (entry.getKey().get(index).equals(queryValue)) {
+                    return entry.getValue();
+                }
             }
+
         }
         return 0.0;
     }
@@ -126,7 +129,7 @@ class Factor implements Comparable<Factor>{
     @Override
     public int compareTo(Factor other_factor) {
         // Compare the number of variables in each factor
-        switch (Integer.compare(this.variables.size(), other_factor.variables.size())){
+        switch (Integer.compare(this.values.size(), other_factor.values.size())){
             case -1:
                 return -1;  // This factor has fewer variables
             case 1:

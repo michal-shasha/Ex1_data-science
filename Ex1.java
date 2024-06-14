@@ -39,7 +39,14 @@ public class Ex1 {
                 // Parsing and handling probability query
                 String[] elimination_query = line.split(" ");
                 elimination_query[0] = elimination_query[0].substring(2, elimination_query[0].length() - 1);
-                String[] hidden_vars = elimination_query[1].split("-");
+                List<String> hidden_vars;
+                if(elimination_query.length > 1){
+                    hidden_vars = new ArrayList<>(Arrays.asList(elimination_query[1].split("-")));
+                }
+                else{
+                    hidden_vars = new ArrayList<>();
+                }
+
 
                 String[] query = elimination_query[0].split("\\|");
                 String[] query_var_value = query[0].split("=");
@@ -54,15 +61,15 @@ public class Ex1 {
                 }
 
                 // Calling variable_elimination function
-                List<String> hidden_vars_list = new ArrayList<>(Arrays.asList(hidden_vars));
-                String resultStr = VariableElimination.variable_elimination(network, query_var_value[0], query_var_value[1], evidence, hidden_vars_list);
+                String resultStr = VariableElimination.variable_elimination(network, query_var_value[0], query_var_value[1], evidence, hidden_vars);
                 String[] resultParts = resultStr.split(",");
                 double result = Double.parseDouble(resultParts[0]);
                 int addOpers = Integer.parseInt(resultParts[1]);
                 int mulOpers = Integer.parseInt(resultParts[2]);
 
                 // Writing the result to the output file
-                output.write(result + "," + addOpers + "," + mulOpers + "\n");
+                String formated_output = String.format("%.5f,%d,%d\n",result,addOpers,mulOpers);
+                output.write(formated_output);
 
             } else {
                 // Assuming 'query' is in the format "query1, query2 | evidence"

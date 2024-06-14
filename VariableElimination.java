@@ -21,15 +21,20 @@ public class VariableElimination {
             }
         }
         // Process each variable in the elimination order
-        for (String var : eliminationOrder) {
-            List<Factor> relevantFactors = getRelevantFactors(factors, var);
-            factors.removeAll(relevantFactors);
-            Factor newFactor = multiplyAndSumOut(relevantFactors, var, mulOpers, addOpers);
-            factors.add(newFactor);
+        if(!eliminationOrder.isEmpty()){
+            for (String var : eliminationOrder) {
+                List<Factor> relevantFactors = getRelevantFactors(factors, var);
+                factors.removeAll(relevantFactors);
+                Factor newFactor = multiplyAndSumOut(relevantFactors, var, mulOpers, addOpers);
+                factors.add(newFactor);
+                Collections.sort(factors);
+            }
+
         }
+
         // Multiply all remaining factors to get the final result
         Factor resultFactor = multiplyAllFactors(factors, mulOpers);
-        if(resultFactor.variables.size() > 1){
+        if(mulOpers.get() > 0){
             normalizeFactor(resultFactor,addOpers); // Normalize the result factor if it contains more than one variable
         }
 
